@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_instance" "example" {
-  ami           = "ami-0c55b159cbfafe1f0"  # Amazon Linux 2 AMI (Update with a valid AMI for your region)
+  ami           = "ami-06fa3f12191aa3337"  # Amazon Linux 2 AMI (Update with a valid AMI for your region)
   instance_type = "t2.micro"
   
   tags = {
