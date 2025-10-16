@@ -14,7 +14,7 @@ provider "aws" {
 
 resource "aws_instance" "example" {
   count         = var.instance_count
-  ami           = "ami-0c2b8ca1dad447f8a"  # Update this for your region if needed
+  ami           = "ami-06fa3f12191aa3337"  # Update this for your region if needed
   instance_type = "t3.micro"
 
   tags = {
