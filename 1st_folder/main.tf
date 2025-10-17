@@ -25,3 +25,5 @@ resource "aws_instance" "example" {
 output "instance_ids" {
   value = aws_instance.example[*].id
 }
+
+
