@@ -13,7 +13,7 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "tf_state" {
-  bucket = "company-terraform-state-bucket"
+  bucket = "company-terraform-state-bucket-anand6183"
   force_destroy = true
 }
 
