@@ -87,7 +87,7 @@ module "compute" {
 # Database Module
 # ------------------------------------------------
 module "database" {
-  source = "../modules/database"
+  source = "../../modules/database"
 
   private_subnet_ids = module.vpc.private_subnet_ids
   db_sg_id           = module.security.db_sg_id
