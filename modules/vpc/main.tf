@@ -31,7 +31,8 @@ resource "aws_eip" "nat" {
 
 resource "aws_nat_gateway" "this" {
   allocation_id = aws_eip.nat.id
-  subnet_id     = element(values(aws_subnet.public), 0) # pick first public subnet
+  subnet_id = values(aws_subnet.public)[0].id
+
 
   tags = merge(
     var.tags,
