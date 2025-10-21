@@ -9,12 +9,13 @@ provider "aws" {
 # VPC Module
 # ------------------------------------------------
 module "vpc" {
-  source = "../modules/vpc"
+  source = "../../modules/vpc"
 
   vpc_cidr             = "10.0.0.0/16"
   enable_dns_support   = true
   enable_dns_hostnames = true
   vpc_name             = "webapp-vpc"
+  availability_zones   = ["ap-south-1a", "ap-south-1b"]
 
   public_subnet_cidrs = {
     "ap-south-1a" = "10.0.1.0/24"
@@ -36,7 +37,7 @@ module "vpc" {
 # Security Module
 # ------------------------------------------------
 module "security" {
-  source = "../modules/security"
+  source = "../../modules/security"
 
   vpc_id   = module.vpc.vpc_id
   vpc_name = "webapp-vpc"
@@ -64,7 +65,7 @@ module "iam" {
 # Compute Module
 # ------------------------------------------------
 module "compute" {
-  source = "../modules/compute"
+  source = "../../modules/compute"
 
   private_subnet_ids         = module.vpc.private_subnet_ids
   public_subnet_ids          = module.vpc.public_subnet_ids
@@ -108,7 +109,7 @@ module "database" {
 # Monitoring Module
 # ------------------------------------------------
 module "monitoring" {
-  source = "../modules/monitoring"
+  source = "../../modules/monitoring"
 
   ec2_instance_ids = module.compute.ec2_instance_ids
   db_instance_id   = module.database.db_instance_id
