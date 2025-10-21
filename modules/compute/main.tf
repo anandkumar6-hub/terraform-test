@@ -4,20 +4,20 @@ resource "aws_key_pair" "deployer" {
 }
 
 resource "aws_instance" "app" {
-  for_each = toset(var.private_subnet_ids)
+  count = length(var.private_subnet_ids)
 
-  ami                    = var.ami_id
-  instance_type          = var.instance_type
-  subnet_id              = each.key
-  key_name               = aws_key_pair.deployer.key_name
-  iam_instance_profile   = var.iam_instance_profile_name
-  vpc_security_group_ids = [var.db_sg_id]
+  ami                         = var.ami_id
+  instance_type               = var.instance_type
+  subnet_id                   = var.private_subnet_ids[count.index]
+  vpc_security_group_ids      = [var.web_sg_id]
+  iam_instance_profile        = var.iam_instance_profile_name
 
   tags = merge(
     var.tags,
-    { Name = "${var.project_name}-app-${each.key}" }
+    { Name = "${var.project_name}-app-${count.index}" }
   )
 }
+
 
 resource "aws_lb" "app_alb" {
   name               = "${var.project_name}-alb"
