@@ -1,6 +1,6 @@
 resource "aws_key_pair" "deployer" {
   key_name   = "${var.project_name}-key"
-  public_key = file("${path.root}/envs/dev/webapp-key.pub")
+  public_key = file("${path.root}/webapp-key.pub")
 
 
   # path to your local public key
