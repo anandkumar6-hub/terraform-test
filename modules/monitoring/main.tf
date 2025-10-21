@@ -15,21 +15,22 @@ resource "aws_cloudwatch_metric_alarm" "ec2_cpu" {
 
   tags = merge(var.tags, { Name = "${var.project_name}-ec2-cpu" })
 }
-resource "aws_cloudwatch_metric_alarm" "rds_cpu" {
-  alarm_name         = "${var.project_name}-rds-cpu"
+
+resource "aws_cloudwatch_metric_alarm" "ec2_cpu" {
+  count              = length(var.ec2_instance_ids)
+  alarm_name         = "CPUUtilization-${count.index}"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = 2
   metric_name         = "CPUUtilization"
-  namespace           = "AWS/RDS"
-  period              = 300
+  namespace           = "AWS/EC2"
+  period              = 120
   statistic           = "Average"
-  threshold           = 70
-  alarm_description   = "Alarm if RDS CPU > 70% for 10 minutes"
+  threshold           = 80
+  alarm_description   = "Alarm when CPU exceeds 80%"
+  alarm_actions       = []
   dimensions = {
-    DBInstanceIdentifier = var.db_instance_id
+    InstanceId = var.ec2_instance_ids[count.index]
   }
-
-  tags = merge(var.tags, { Name = "${var.project_name}-rds-cpu" })
 }
 
 resource "aws_cloudwatch_metric_alarm" "alb_5xx" {

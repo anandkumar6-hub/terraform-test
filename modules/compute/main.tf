@@ -53,12 +53,13 @@ resource "aws_lb_target_group" "app_tg" {
 }
 
 resource "aws_lb_target_group_attachment" "app_attach" {
-  for_each = aws_instance.app
+  count = length(aws_instance.app)
 
   target_group_arn = aws_lb_target_group.app_tg.arn
-  target_id        = each.value.id
+  target_id        = aws_instance.app[count.index].id
   port             = 80
 }
+
 
 resource "aws_lb_listener" "app_listener" {
   load_balancer_arn = aws_lb.app_alb.arn
