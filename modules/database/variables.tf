@@ -10,7 +10,6 @@ variable "db_sg_id" {
 # DB Config
 variable "db_name" {
   type    = string
-  default = "appdb"
 }
 
 variable "db_username" {
