@@ -33,19 +33,3 @@ resource "aws_cloudwatch_metric_alarm" "ec2_cpu" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "alb_5xx" {
-  alarm_name          = "${var.project_name}-alb-5xx"
-  comparison_operator = "GreaterThanThreshold"
-  evaluation_periods  = 2
-  metric_name         = "HTTPCode_ELB_5XX_Count"
-  namespace           = "AWS/ApplicationELB"
-  period              = 300
-  statistic           = "Sum"
-  threshold           = 5
-  alarm_description   = "Alarm if ALB returns more than 5 5XX responses in 5 minutes"
-  dimensions = {
-    LoadBalancer = var.alb_arn
-  }
-
-  tags = merge(var.tags, { Name = "${var.project_name}-alb-5xx" })
-}
