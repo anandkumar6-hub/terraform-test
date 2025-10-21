@@ -74,7 +74,7 @@ module "compute" {
   iam_instance_profile_name  = module.iam.ec2_instance_profile_name
   instance_count             = 2
   instance_type              = "t3.micro"
-  ami_id                     = "ami-0c02fb55956c7d316" # Amazon Linux 2 in ap-south-1
+  ami_id                     = "ami-06fa3f12191aa3337" # Amazon Linux 2 in ap-south-1
   project_name               = "webapp"
 
   tags = {
