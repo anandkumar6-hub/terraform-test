@@ -1,52 +1,50 @@
-# Networking
-variable "private_subnet_ids" {
-  type = list(string)
-}
-
-variable "db_sg_id" {
-  type = string
-}
-
-# DB Config
 variable "db_name" {
-  type    = string
+  description = "Name of the database"
+  type        = string
 }
 
 variable "db_username" {
-  type    = string
-  default = "admin"
+  description = "Database username"
+  type        = string
 }
 
 variable "db_password" {
-  type    = string
-  sensitive = true
+  description = "Database password"
+  type        = string
+  sensitive   = true
 }
 
 variable "db_instance_class" {
-  type    = string
-  default = "db.t3.micro"
+  description = "Instance class for RDS"
+  type        = string
 }
 
 variable "db_engine" {
-  type    = string
-  default = "mysql"
+  description = "Database engine type"
+  type        = string
 }
 
 variable "db_engine_version" {
-  type    = string
-  default = "8.0"
+  description = "Database engine version"
+  type        = string
 }
 
-# General
+variable "private_subnet_ids" {
+  description = "Private subnets for RDS"
+  type        = list(string)
+}
+
+variable "db_sg_id" {
+  description = "Security group ID for RDS"
+  type        = string
+}
+
 variable "project_name" {
-  type = string
+  description = "Project name tag"
+  type        = string
 }
 
 variable "tags" {
-  type = map(string)
-}
-variable "db_name" {
-  description = "The name of the database to create"
-  type        = string
-  default     = "appdb"   # optional default
+  description = "Tags for resources"
+  type        = map(string)
 }
