@@ -2,7 +2,7 @@
 # Provider
 # ------------------------------------------------
 provider "aws" {
-  region = "ap-south-1"
+  region = var.region
 }
 
 # ------------------------------------------------
@@ -11,27 +11,18 @@ provider "aws" {
 module "vpc" {
   source = "../../modules/vpc"
 
-  vpc_cidr             = "10.0.0.0/16"
+  vpc_cidr             = var.vpc_cidr
   enable_dns_support   = true
   enable_dns_hostnames = true
-  vpc_name             = "webapp-vpc"
-  availability_zones   = ["ap-south-1a", "ap-south-1b"]
-
-  public_subnet_cidrs = {
-    "ap-south-1a" = "10.0.1.0/24"
-    "ap-south-1b" = "10.0.2.0/24"
-  }
-  
-  private_subnet_cidrs = {
-    "ap-south-1a" = "10.0.101.0/24"
-    "ap-south-1b" = "10.0.102.0/24"
-  }
-
-  single_nat_gateway = true
+  vpc_name             = "${var.project_name}-vpc"
+  availability_zones   = var.availability_zones
+  public_subnet_cidrs  = var.public_subnet_cidrs
+  private_subnet_cidrs = var.private_subnet_cidrs
+  single_nat_gateway   = var.single_nat_gateway
 
   tags = {
-    Environment = "dev"
-    Project     = "web-app"
+    Environment = var.environment
+    Project     = var.project_name
     ManagedBy   = "terraform"
   }
 }
@@ -43,11 +34,11 @@ module "security" {
   source = "../../modules/security"
 
   vpc_id   = module.vpc.vpc_id
-  vpc_name = "webapp-vpc"
+  vpc_name = "${var.project_name}-vpc"
 
   tags = {
-    Environment = "dev"
-    Project     = "web-app"
+    Environment = var.environment
+    Project     = var.project_name
   }
 }
 
@@ -56,11 +47,11 @@ module "security" {
 # ------------------------------------------------
 module "iam" {
   source       = "../../modules/iam"
-  project_name = "webapp"
+  project_name = var.project_name
 
   tags = {
-    Environment = "dev"
-    Project     = "web-app"
+    Environment = var.environment
+    Project     = var.project_name
   }
 }
 
@@ -70,20 +61,20 @@ module "iam" {
 module "compute" {
   source = "../../modules/compute"
 
-  vpc_id                     =  module.vpc.vpc_id 
+  vpc_id                     = module.vpc.vpc_id 
   private_subnet_ids         = module.vpc.private_subnet_ids
   public_subnet_ids          = module.vpc.public_subnet_ids
   db_sg_id                   = module.security.db_sg_id
   web_sg_id                  = module.security.web_sg_id
   iam_instance_profile_name  = module.iam.ec2_instance_profile_name
-  instance_count             = 2
-  instance_type              = "t3.micro"
-  ami_id                     = "ami-06fa3f12191aa3337" # Amazon Linux 2 in ap-south-1
-  project_name               = "webapp"
+  instance_count             = var.instance_count
+  instance_type              = var.instance_type
+  ami_id                     = var.ami_id
+  project_name               = var.project_name
 
   tags = {
-    Environment = "dev"
-    Project     = "web-app"
+    Environment = var.environment
+    Project     = var.project_name
   }
 }
 
@@ -95,17 +86,17 @@ module "database" {
 
   private_subnet_ids = module.vpc.private_subnet_ids
   db_sg_id           = module.security.db_sg_id
-  db_name            = "appdb"
-  db_username        = "admin"
-  db_password        = "SuperSecret123!"
-  db_instance_class  = "db.t3.micro"
-  db_engine          = "mysql"
-  db_engine_version  = "8.0"
-  project_name       = "webapp"
+  db_name            = var.db_name
+  db_username        = var.db_username
+  db_password        = var.db_password
+  db_instance_class  = var.db_instance_class
+  db_engine          = var.db_engine
+  db_engine_version  = var.db_engine_version
+  project_name       = var.project_name
 
   tags = {
-    Environment = "dev"
-    Project     = "web-app"
+    Environment = var.environment
+    Project     = var.project_name
   }
 }
 
@@ -118,10 +109,10 @@ module "monitoring" {
   ec2_instance_ids = module.compute.ec2_instance_ids
   db_instance_id   = module.database.db_instance_id
   alb_arn          = module.compute.alb_arn
-  project_name     = "webapp"
+  project_name     = var.project_name
 
   tags = {
-    Environment = "dev"
-    Project     = "web-app"
+    Environment = var.environment
+    Project     = var.project_name
   }
 }
