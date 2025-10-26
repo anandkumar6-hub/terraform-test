@@ -1,7 +1,7 @@
 # AWS and Environment
 region       = "ap-south-1"
 environment  = "dev"
-project_name = "webapp"
+project_name = "devops-project"
 
 # VPC
 vpc_cidr     = "10.0.0.0/16"
@@ -28,3 +28,4 @@ db_password       = "SuperSecret123!"      # Change this in production!
 db_instance_class = "db.t3.micro"
 db_engine         = "mysql"
 db_engine_version = "8.0"
+
