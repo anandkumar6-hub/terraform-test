@@ -17,7 +17,7 @@ private_subnet_cidrs = {
 single_nat_gateway = true
 
 # Compute
-instance_type  = "t3.micro"
+instance_type  = "t3.small"
 instance_count = 2
 ami_id         = "ami-06fa3f12191aa3337"  # Amazon Linux 2 in ap-south-1
 
